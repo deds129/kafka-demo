@@ -19,20 +19,23 @@ public class Consumer {
         Logger logger = LoggerFactory.getLogger(Consumer.class);
 
         Properties properties = new Properties();
+		//broker address
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
-        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class.getName());
+		//deserializer key + msg
+        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class.getName()); 
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+		//consumers group
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, "group2");
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest"); //earliest, none
 
         KafkaConsumer<Integer, String> consumer = new KafkaConsumer<>(properties);
-        consumer.subscribe(Collections.singleton("demo-topic1"));
+        consumer.subscribe(Collections.singleton("demo-topic"));
 
         while (true) {
             ConsumerRecords<Integer, String> records = consumer.poll(Duration.ofMillis(100));
             for (ConsumerRecord<Integer, String> record : records) {
                 logger.info("key " + record.key() + " value " + record.value() + " partition " +
-                        record.partition() + " offset" + record.offset());
+                        record.partition() + " offset " + record.offset());
             }
 
         }

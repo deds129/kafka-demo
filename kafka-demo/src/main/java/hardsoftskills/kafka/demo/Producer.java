@@ -20,7 +20,7 @@ public class Producer {
 
         KafkaProducer<Integer, String> producer = new KafkaProducer<>(properties);
         for (int i = 0; i < 10000; i++) {
-            ProducerRecord<Integer, String> record = new ProducerRecord<>("demo-topic1", i % 3, "" + i);
+            ProducerRecord<Integer, String> record = new ProducerRecord<>("demo-topic", i % 3, "" + i);
             producer.send(record, (metadata, exception) -> {
                 if (exception == null) {
                     logger.info("received new metadata, topic " + metadata.topic() + " partition " +
